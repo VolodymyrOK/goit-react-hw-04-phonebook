@@ -1,69 +1,66 @@
-import { GlobalStyle } from 'styles/GlobalStyles';
-import { Layout } from 'styles/Layout';
 import { Component } from 'react';
-import { Section } from './Section/Section';
-import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
-import { Statistics } from './Statistics/Statistics';
-import { Notification } from './Notification/Notification';
-
-const initialState = {
-  good: 0,
-  neutral: 0,
-  bad: 0,
-};
+import { GlobalStyle } from 'styles/GlobalStyles';
+import { nanoid } from 'nanoid';
+import data from '../data/data.json';
+import { Layout } from 'styles/Layout';
+import { ContactsEntry } from './ContactsEntry/ContactsEntry';
+import { ContactsList } from './ContactsList/ContactsList';
 
 export class App extends Component {
   state = {
-    ...initialState,
+    contacts: data,
+    filter: '',
   };
 
-  onReload = () => {
-    // window.location.reload();
-    this.setState({ ...initialState });
+  addContact = newContacts => {
+    const isDuplicated = this.state.contacts.find(
+      item => item.name.toLowerCase() === newContacts.name.toLowerCase()
+    );
+    if (isDuplicated)
+      return alert(newContacts.name + ' is already in contacts');
+
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, { id: nanoid(4), ...newContacts }],
+    }));
   };
 
-  onLeaveFeedback = option => {
-    this.setState(prevState => {
-      return { [option]: prevState[option] + 1 };
+  delContact = idContact => {
+    const isDelete = window.confirm('Are you sure?');
+    if (isDelete)
+      this.setState(prevState => ({
+        contacts: prevState.contacts.filter(item => item.id !== idContact),
+      }));
+  };
+
+  onFilterElement = newFilter => {
+    this.setState({
+      filter: newFilter,
     });
   };
 
-  countTotalFeedback = () => {
-    const { good, neutral, bad } = this.state;
-    return good + neutral + bad;
-  };
-
-  countPositiveFeedbackPercentage = () => {
-    const { good } = this.state;
-    const total = this.countTotalFeedback() || 1;
-    return Math.round((good / total) * 100);
-  };
+  getVisibleContacts = () =>
+    this.state.contacts.filter(item =>
+      item.name.toLowerCase().includes(this.state.filter.toLowerCase())
+    );
 
   render() {
-    const options = Object.keys(this.state);
-    const entries = Object.entries(this.state);
-    console.log('options', options);
-    console.log('entries', entries);
+    const contacts = this.getVisibleContacts();
+
     return (
       <Layout>
-        <Section title="Please leave feedback">
-          <FeedbackOptions
-            options={options}
-            onLeaveFeedBack={this.onLeaveFeedback}
-          />
-        </Section>
-        <Section title="Statistics">
-          {this.countTotalFeedback() ? (
-            <Statistics
-              entries={entries}
-              total={this.countTotalFeedback}
-              positivePercentage={this.countPositiveFeedbackPercentage}
-              onReload={this.onReload}
-            />
-          ) : (
-            <Notification message="There is no feedback" />
-          )}
-        </Section>
+        <ContactsEntry
+          title="Phonebook"
+          state={this.state}
+          onAdd={this.addContact}
+        />
+
+        <ContactsList
+          title="Contacts"
+          onFilterElement={this.onFilterElement}
+          filter={this.state.filter}
+          contacts={contacts}
+          onDelContact={this.delContact}
+        />
         <GlobalStyle />
       </Layout>
     );
