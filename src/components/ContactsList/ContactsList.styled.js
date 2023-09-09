@@ -15,25 +15,32 @@ export const ContactListItem = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 8px;
   & > span {
     display: inline-block;
+    text-align: center;
     &:nth-child(1) {
-      margin-bottom: 8px;
+      width: 230px;
       font-size: 18px;
       color: ${({ theme: { colors } }) => colors.colorName};
       font-style: italic;
+      text-align: left;
     }
     &:nth-child(2) {
-      margin-left: 18px;
-      font-weight: 500;
+      font-weight: 700;
       color: ${({ theme: { colors } }) => colors.colorPhone};
+      text-align: center;
+    }
+    &:nth-child(3) {
+      width: 60px;
+      text-align: right;
     }
   }
 `;
 
 export const DelButton = styled.button`
+  display: inline-block;
   font-size: 14px;
-  margin-left: 14px;
   border: 1px solid teal;
   border-radius: 4px;
   cursor: pointer;

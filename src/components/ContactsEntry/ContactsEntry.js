@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import PropTypes from 'prop-types';
 
 import {
   Label,
@@ -26,16 +26,15 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
-export const ContactsEntry = ({ title, state, onAdd }) => {
-  state = {
-    name: '',
-    number: '',
-  };
+export const ContactsEntry = ({ onAdd }) => {
   return (
     <>
-      <Title>{title}</Title>
+      <Title>Phonebook</Title>
       <Formik
-        initialValues={state}
+        initialValues={{
+          name: '',
+          number: '',
+        }}
         validationSchema={SignupSchema}
         onSubmit={(values, reset) => {
           onAdd(values);
@@ -71,7 +70,5 @@ export const ContactsEntry = ({ title, state, onAdd }) => {
 };
 
 ContactsEntry.propTypes = {
-  title: PropTypes.string,
-  state: PropTypes.object,
   onAdd: PropTypes.func,
 };

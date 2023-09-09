@@ -10,7 +10,6 @@ import {
 } from './ContactsList.styled';
 
 export const ContactsList = ({
-  title,
   contacts,
   onDelContact,
   onFilterElement,
@@ -19,7 +18,7 @@ export const ContactsList = ({
   return (
     <>
       <HeadContacts>
-        <Title>{title}</Title>
+        <Title>Contacts</Title>
         <Filter onFilterElement={onFilterElement} filter={filter} />
       </HeadContacts>
       <ContactList>
@@ -30,9 +29,11 @@ export const ContactsList = ({
             <ContactListItem key={id}>
               <span>{name}:</span>
               <span>{number}</span>
-              <DelButton type="button" onClick={() => onDelContact(id)}>
-                Delete
-              </DelButton>
+              <span>
+                <DelButton type="button" onClick={() => onDelContact(id)}>
+                  Delete
+                </DelButton>
+              </span>
             </ContactListItem>
           ))
         )}
@@ -42,7 +43,6 @@ export const ContactsList = ({
 };
 
 ContactsList.propTypes = {
-  title: PropTypes.string,
   onFilterElement: PropTypes.func,
   filter: PropTypes.string,
   contacts: PropTypes.arrayOf(
