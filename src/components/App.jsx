@@ -28,7 +28,6 @@ export const App = () => {
   );
 
   const addContact = newContacts => {
-    console.log(newContacts);
     const isDuplicated = contacts.find(
       item => item.name.toLowerCase() === newContacts.name.toLowerCase()
     );
