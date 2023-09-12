@@ -39,7 +39,8 @@ export const App = () => {
 
   const delContact = idContact => {
     if (window.confirm('Are you sure?'))
-      setContacts(contacts.filter(item => item.id !== idContact));
+      // setContacts(contacts.filter(item => item.id !== idContact));
+      setContacts(prev => prev.filter(item => item.id !== idContact));
   };
 
   const onFilterElement = newFilter => {
